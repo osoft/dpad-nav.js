@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div {
+            width: 100px;
+            height: 40px;
+            background-color: #333333;
+            margin: 20px;
+        }
+
+        div:focus {
+            background-color: aqua;
+        }
+
+        button:focus {
+            background-color: cyan;
+        }
+    </style>
+
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="../dpad-nav.js"></script>
+    <script>
+
+        $(document).on("ready", function() {
+            scanFocusables();
+            focusDefaultItem();
+        });
+
+    </script>
+</head>
+<body>
+<button id="btn1" class="focusable">Button 1</button>
+<button id="btn2" class="focusable">Button 2</button>
+<button id="btn3" class="focusable">Button 3</button>
+
+<div id="div1" tabindex="-1" class="focusable"></div>
+<div id="div2" tabindex="-1" class="focusable"></div>
+<div id="div3" tabindex="-1" class="focusable"></div>
+
+</body>
+</html>
