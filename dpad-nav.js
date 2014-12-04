@@ -1,38 +1,38 @@
-var dpadNavCurrentScope;
+var dPadNav = dPadNav || {};
 
 // Move focus
-$(document).on("keyup", function (e) {
+$(document).on("keydown", function (e) {
     //console.log("Try Move focus: keyup " + e);
     var focusedId = $(':focus').attr('id');
-    var focusable = getFocusable(focusedId);
+    var focusable = dPadNav.getFocusable(focusedId);
     console.log("src offset: " + focusable.offset.left + ", " + focusable.offset.top);
     switch (e.keyCode) {
         case 39: // Right
             if (focusable.right.id !== "") {
-                $('#' + focusable.right.id, dpadNavCurrentScope).focus();
+                $('#' + focusable.right.id, dPadNav.scope).focus();
             } else {
-                forceNavigate(focusable.offset, 39);
+                dPadNav.forceNavigate(focusable.offset, 39);
             }
             break;
         case 37: // Left
             if (focusable.left.id !== "") {
-                $('#' + focusable.left.id, dpadNavCurrentScope).focus();
+                $('#' + focusable.left.id, dPadNav.scope).focus();
             } else {
-                forceNavigate(focusable.offset, 37);
+                dPadNav.forceNavigate(focusable.offset, 37);
             }
             break;
         case 38: // Up
             if (focusable.up.id !== "") {
-                $('#' + focusable.up.id, dpadNavCurrentScope).focus();
+                $('#' + focusable.up.id, dPadNav.scope).focus();
             } else {
-                forceNavigate(focusable.offset, 38);
+                dPadNav.forceNavigate(focusable.offset, 38);
             }
             break;
         case 40: // Down
             if (focusable.down.id !== "") {
-                $('#' + focusable.down.id, dpadNavCurrentScope).focus();
+                $('#' + focusable.down.id, dPadNav.scope).focus();
             } else {
-                forceNavigate(focusable.offset, 40);
+                dPadNav.forceNavigate(focusable.offset, 40);
             }
             break;
         default:
@@ -40,43 +40,43 @@ $(document).on("keyup", function (e) {
     }
 });
 
-var dpadNavFocusables = [];
+dPadNav.focusables = [];
 
-function forceNavigate(srcOffset, direction) {
+dPadNav.forceNavigate = function(srcOffset, direction) {
     //alert('try force navigate');
-    for (var i = 0; i < dpadNavFocusables.length; i++) {
-        console.log("focusable[" + i + "]: " + dpadNavFocusables[i].offset.left + ", " + dpadNavFocusables[i].offset.top + " @@@ " + srcOffset.left + "," + srcOffset.top);
+    for (var i = 0; i < dPadNav.focusables.length; i++) {
+        console.log("focusable[" + i + "]: " + dPadNav.focusables[i].offset.left + ", " + dPadNav.focusables[i].offset.top + " @@@ " + srcOffset.left + "," + srcOffset.top);
         // Up
-        if (direction === 38 && dpadNavFocusables[i].offset.top < srcOffset.top) {
-            //alert('force navigate!' + dpadNavFocusables[i].id);
-            $('#' + dpadNavFocusables[i].id, dpadNavCurrentScope).focus();
+        if (direction === 38 && dPadNav.focusables[i].offset.top < srcOffset.top) {
+            //alert('force navigate!' + dPadNav.focusables[i].id);
+            $('#' + dPadNav.focusables[i].id, dPadNav.scope).focus();
             return;
         }
         // Down
-        if (direction === 40 && dpadNavFocusables[i].offset.top > srcOffset.top) {
-            //alert('force navigate!' + dpadNavFocusables[i].id);
-            $('#' + dpadNavFocusables[i].id, dpadNavCurrentScope).focus();
+        if (direction === 40 && dPadNav.focusables[i].offset.top > srcOffset.top) {
+            //alert('force navigate!' + dPadNav.focusables[i].id);
+            $('#' + dPadNav.focusables[i].id, dPadNav.scope).focus();
             return;
         }
         // Left
-        if (direction === 37 && dpadNavFocusables[i].offset.left < srcOffset.left) {
-            //alert('force navigate!' + dpadNavFocusables[i].id);
-            $('#' + dpadNavFocusables[i].id, dpadNavCurrentScope).focus();
+        if (direction === 37 && dPadNav.focusables[i].offset.left < srcOffset.left) {
+            //alert('force navigate!' + dPadNav.focusables[i].id);
+            $('#' + dPadNav.focusables[i].id, dPadNav.scope).focus();
             return;
         }
         // Right
-        if (direction === 39 && dpadNavFocusables[i].offset.left > srcOffset.left) {
-            //alert('force navigate!' + dpadNavFocusables[i].id);
-            $('#' + dpadNavFocusables[i].id, dpadNavCurrentScope).focus();
+        if (direction === 39 && dPadNav.focusables[i].offset.left > srcOffset.left) {
+            //alert('force navigate!' + dPadNav.focusables[i].id);
+            $('#' + dPadNav.focusables[i].id, dPadNav.scope).focus();
             return;
         }
     }
 }
 
-function getFocusable(id) {
-    for (var i = 0; i < dpadNavFocusables.length; i++) {
-        if (dpadNavFocusables[i].id === id) {
-            return dpadNavFocusables[i];
+dPadNav.getFocusable = function(id) {
+    for (var i = 0; i < dPadNav.focusables.length; i++) {
+        if (dPadNav.focusables[i].id === id) {
+            return dPadNav.focusables[i];
         }
     }
 }
@@ -88,10 +88,10 @@ function getFocusable(id) {
  * @param preference Omitted this parameter to make the algorithm more flexible.
  *        Use "column" or "row" to set the preference.
  */
-function scanFocusables(selector, scope, preference) {
-    dpadNavCurrentScope = scope;
+dPadNav.scanFocusables = function(selector, scope, preference) {
+    dPadNav.scope = scope;
 
-    dpadNavFocusables = [];
+    dPadNav.focusables = [];
     var strictVertical = true;
     var strictHorizontal = true;
     if (typeof selector === 'undefined') {
@@ -106,7 +106,7 @@ function scanFocusables(selector, scope, preference) {
         strictVertical = false;
     }
     console.log("scanFocusables: " + selector);
-    $(selector, dpadNavCurrentScope).not(':hidden').each(function (index, element) {
+    $(selector, dPadNav.scope).not(':hidden').each(function (index, element) {
         var offsetVal = $(element).offset();
         var height = $(element).height();
         var width = $(element).width();
@@ -131,81 +131,81 @@ function scanFocusables(selector, scope, preference) {
         };
 
         //alert(offsetVal.left + " " + offsetVal.top);
-        for (var i = 0; i < dpadNavFocusables.length; i++) {
-            var dx = lOffsetVal.left - dpadNavFocusables[i].offsetR.left;
-            var dy = lOffsetVal.top - dpadNavFocusables[i].offsetR.top;
+        for (var i = 0; i < dPadNav.focusables.length; i++) {
+            var dx = lOffsetVal.left - dPadNav.focusables[i].offsetR.left;
+            var dy = lOffsetVal.top - dPadNav.focusables[i].offsetR.top;
             var dist = Math.sqrt(dx * dx + dy * dy);
             if (dx >= 0 && (!strictHorizontal || (dy >= -dx && dy <= dx))) {
                 // Right
-                if (dpadNavFocusables[i].right.dist > dist) {
-                    dpadNavFocusables[i].right.id = $(element).attr("id");
-                    dpadNavFocusables[i].right.dist = dist;
+                if (dPadNav.focusables[i].right.dist > dist) {
+                    dPadNav.focusables[i].right.id = $(element).attr("id");
+                    dPadNav.focusables[i].right.dist = dist;
                 }
 
                 if (focusableToAdd.left.dist > dist) {
-                    //console.log($(element).attr("id") + " is closer to " + dpadNavFocusables[i].id + "[right] than " + dpadNavFocusables[i].right.id);
-                    focusableToAdd.left.id = dpadNavFocusables[i].id;
+                    //console.log($(element).attr("id") + " is closer to " + dPadNav.focusables[i].id + "[right] than " + dPadNav.focusables[i].right.id);
+                    focusableToAdd.left.id = dPadNav.focusables[i].id;
                     focusableToAdd.left.dist = dist;
                 }
 
             }
-            dx = rOffsetVal.left - dpadNavFocusables[i].offsetL.left;
-            dy = rOffsetVal.top - dpadNavFocusables[i].offsetL.top;
+            dx = rOffsetVal.left - dPadNav.focusables[i].offsetL.left;
+            dy = rOffsetVal.top - dPadNav.focusables[i].offsetL.top;
             dist = Math.sqrt(dx * dx + dy * dy);
             if (dx < 0 && (!strictHorizontal || (dy > dx && dy < -dx))) {
                 // Left
-                if (dpadNavFocusables[i].left.dist > dist) {
-                    //console.log($(element).attr("id") + " is closer to " + dpadNavFocusables[i].id + "[left] than " + dpadNavFocusables[i].left.id);
-                    dpadNavFocusables[i].left.dist = dist;
-                    dpadNavFocusables[i].left.id = $(element).attr("id");
+                if (dPadNav.focusables[i].left.dist > dist) {
+                    //console.log($(element).attr("id") + " is closer to " + dPadNav.focusables[i].id + "[left] than " + dPadNav.focusables[i].left.id);
+                    dPadNav.focusables[i].left.dist = dist;
+                    dPadNav.focusables[i].left.id = $(element).attr("id");
                 }
 
                 if (focusableToAdd.right.dist > dist) {
-                    focusableToAdd.right.id = dpadNavFocusables[i].id;
+                    focusableToAdd.right.id = dPadNav.focusables[i].id;
                     focusableToAdd.right.dist = dist;
                 }
             }
 
-            dx = dOffsetVal.left - dpadNavFocusables[i].offsetU.left;
-            dy = dOffsetVal.top - dpadNavFocusables[i].offsetU.top;
+            dx = dOffsetVal.left - dPadNav.focusables[i].offsetU.left;
+            dy = dOffsetVal.top - dPadNav.focusables[i].offsetU.top;
             dist = Math.sqrt(dx * dx + dy * dy);
             if (dy < 0 && (!strictVertical || (dx > dy && dx < -dy))) {
                 // Up
-                if (dpadNavFocusables[i].up.dist > dist) {
-                    //console.log($(element).attr("id") + " is closer to " + dpadNavFocusables[i].id + "[up] than " + dpadNavFocusables[i].up.id);
-                    dpadNavFocusables[i].up.dist = dist;
-                    dpadNavFocusables[i].up.id = $(element).attr("id");
+                if (dPadNav.focusables[i].up.dist > dist) {
+                    //console.log($(element).attr("id") + " is closer to " + dPadNav.focusables[i].id + "[up] than " + dPadNav.focusables[i].up.id);
+                    dPadNav.focusables[i].up.dist = dist;
+                    dPadNav.focusables[i].up.id = $(element).attr("id");
                 }
 
                 if (focusableToAdd.down.dist > dist) {
-                    focusableToAdd.down.id = dpadNavFocusables[i].id;
+                    focusableToAdd.down.id = dPadNav.focusables[i].id;
                     focusableToAdd.down.dist = dist;
                 }
             }
-            dx = uOffsetVal.left - dpadNavFocusables[i].offsetD.left;
-            dy = uOffsetVal.top - dpadNavFocusables[i].offsetD.top;
+            dx = uOffsetVal.left - dPadNav.focusables[i].offsetD.left;
+            dy = uOffsetVal.top - dPadNav.focusables[i].offsetD.top;
             dist = Math.sqrt(dx * dx + dy * dy);
             if (dy >= 0 && (!strictVertical || (dx >= -dy && dx <= dy))) {
                 // Down
-                if (dpadNavFocusables[i].down.dist > dist) {
-                    //console.log($(element).attr("id") + " is closer to " + dpadNavFocusables[i].id + "[down] than " + dpadNavFocusables[i].down.id);
-                    dpadNavFocusables[i].down.dist = dist;
-                    dpadNavFocusables[i].down.id = $(element).attr("id");
+                if (dPadNav.focusables[i].down.dist > dist) {
+                    //console.log($(element).attr("id") + " is closer to " + dPadNav.focusables[i].id + "[down] than " + dPadNav.focusables[i].down.id);
+                    dPadNav.focusables[i].down.dist = dist;
+                    dPadNav.focusables[i].down.id = $(element).attr("id");
                 }
                 if (focusableToAdd.up.dist > dist) {
-                    focusableToAdd.up.id = dpadNavFocusables[i].id;
+                    focusableToAdd.up.id = dPadNav.focusables[i].id;
                     focusableToAdd.up.dist = dist;
                 }
             }
         }
-        dpadNavFocusables.push(focusableToAdd);
+        dPadNav.focusables.push(focusableToAdd);
 
     });
 }
 
-function focusDefaultItem() {
-    if (dpadNavFocusables.length > 0) {
-        console.log("Focus: " + dpadNavFocusables[0].id);
-        $('#' + dpadNavFocusables[0].id).focus();
+dPadNav.focusDefaultItem = function() {
+    if (dPadNav.focusables.length > 0) {
+        console.log("Focus: " + dPadNav.focusables[0].id);
+        $('#' + dPadNav.focusables[0].id).focus();
     }
 }
