@@ -4,11 +4,11 @@ dpad-nav
 a keyboard(dpad) web page navigation library for <a href="http://jquery.com">jQuery</a>/<a href="http://zeptojs.com">Zepto</a>.
 
 ##Usage
-##### Include keynavigator.js after having included jQuery or Zepto:
+##### Include dpad-nav.js after having included jQuery or Zepto:
 
 ```html
 <script src="jquery.js"></script>
-<script src="keynavigator.js"></script>
+<script src="dpad-nav.js"></script>
 ```
 
 
