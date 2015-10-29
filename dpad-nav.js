@@ -110,13 +110,17 @@ dPadNav.scanFocusables = function(selector, scope, preference) {
         var offsetVal = $(element).offset();
         var height = $(element).height();
         var width = $(element).width();
-        offsetVal = {left: offsetVal.left + width / 2,
-            top: offsetVal.top + height / 2};
+        // offsetVal = {left: offsetVal.left + width / 2,
+        //     top: offsetVal.top + height / 2};
         //console.log("Scanning: " + $(element).attr("id") + " " + offsetVal.left + "," + offsetVal.top);
-        var uOffsetVal = {left: offsetVal.left, top: offsetVal.top - height / 2};
-        var dOffsetVal = {left: offsetVal.left, top: offsetVal.top + height / 2};
-        var lOffsetVal = {left: offsetVal.left - width / 2, top: offsetVal.top};
-        var rOffsetVal = {left: offsetVal.left + width / 2, top: offsetVal.top};
+        // var uOffsetVal = {left: offsetVal.left, top: offsetVal.top - height / 2};
+        // var dOffsetVal = {left: offsetVal.left, top: offsetVal.top + height / 2};
+        // var lOffsetVal = {left: offsetVal.left - width / 2, top: offsetVal.top};
+        // var rOffsetVal = {left: offsetVal.left + width / 2, top: offsetVal.top};
+        var uOffsetVal = {left: offsetVal.left + width / 2, top: offsetVal.top};
+        var dOffsetVal = {left: offsetVal.left + width / 2, top: offsetVal.top + height};
+        var lOffsetVal = {left: offsetVal.left, top: offsetVal.top + height / 2};
+        var rOffsetVal = {left: offsetVal.left + width, top: offsetVal.top + height / 2};
         var focusableToAdd = {
             id: $(element).attr("id"),
             offset: offsetVal,
