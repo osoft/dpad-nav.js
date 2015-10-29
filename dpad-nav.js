@@ -207,6 +207,19 @@ dPadNav.scanFocusables = function(selector, scope, preference) {
     });
 }
 
+dPadNav.overrideMovement = function(idSource, direction, idTarget) {
+  sourceEl = dPadNav.getFocusable(idSource);
+  if (direction === "left") {
+    sourceEl.left.id = idTarget;
+  } else if (direction === "right") {
+    sourceEl.right.id = idTarget;
+  } else if (direction === "up") {
+    sourceEl.up.id = idTarget;
+  } else if (direction === "down") {
+    sourceEl.down.id = idTarget;
+  }
+};
+
 dPadNav.focusDefaultItem = function() {
     if (dPadNav.focusables.length > 0) {
         console.log("Focus: " + dPadNav.focusables[0].id);
